@@ -61,7 +61,7 @@ async def mentionall(event):
     elif event.is_reply:
         mode = "balas"
         msg = await event.get_reply_message()
-        if msg == None:
+        if msg is None:
             return await event.respond("**Si anjeng dibilang kasih pesan !!**")
     else:
         return await event.respond("**Si anjeng dibilang kasih pesan !!**")
@@ -70,16 +70,16 @@ async def mentionall(event):
     usrnum = 0
     usrtxt = ""
     async for usr in ayra_bot.iter_participants(chat_id):
-        if not chat_id in spam_chats:
+        if chat_id not in spam_chats:
             break
         usrnum += 1
         usrtxt += f"🥵 [{usr.first_name}](tg://user?id={usr.id})\n"
         if usrnum == 5:
-            if mode == "teks":
+            if mode == "balas":
+                await msg.reply(usrtxt)
+            elif mode == "teks":
                 txt = f"{usrtxt}\n\n{msg}"
                 await ayra_bot.send_message(chat_id, txt)
-            elif mode == "balas":
-                await msg.reply(usrtxt)
             await asyncio.sleep(2)
             usrnum = 0
             usrtxt = ""
@@ -91,14 +91,13 @@ async def mentionall(event):
 
 @ayra_cmd(pattern="[Bb][a][t][a][l](?: |$)")
 async def lu_anj(event):
-    if not event.chat_id in spam_chats:
+    if event.chat_id not in spam_chats:
         return await event.respond("**Bego orang gak ada tag all**")
-    else:
-        try:
-            spam_chats.remove(event.chat_id)
-        except:
-            pass
-        return await event.respond("**Iya Anjeng Nih Gua Stop.**")
+    try:
+        spam_chats.remove(event.chat_id)
+    except:
+        pass
+    return await event.respond("**Iya Anjeng Nih Gua Stop.**")
 
 
 @ayra_cmd(pattern="[Ee][m][o][j][i][t][a][g](?: |$)(.*)")
@@ -128,7 +127,7 @@ async def lu_kontol(event):
     elif event.is_reply:
         mode = "balas"
         msg = await event.get_reply_message()
-        if msg == None:
+        if msg is None:
             return await event.respond("**Si anjeng dibilang kasih pesan !!**")
     else:
         return await event.respond("**Si anjeng dibilang kasih pesan !!**")
@@ -137,16 +136,16 @@ async def lu_kontol(event):
     usrnum = 0
     usrtxt = ""
     async for usr in ayra_bot.iter_participants(chat_id):
-        if not chat_id in spam_chats:
+        if chat_id not in spam_chats:
             break
         usrnum += 1
         usrtxt += f"[{random.choice(emoji)}](tg://user?id={usr.id})"
         if usrnum == 5:
-            if mode == "teks":
+            if mode == "balas":
+                await msg.reply(usrtxt)
+            elif mode == "teks":
                 txt = f"{usrtxt}\n\n{msg}"
                 await ayra_bot.send_message(chat_id, txt)
-            elif mode == "balas":
-                await msg.reply(usrtxt)
             await asyncio.sleep(2)
             usrnum = 0
             usrtxt = ""

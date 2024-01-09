@@ -29,20 +29,11 @@ BAHASA = ["en", "id", "fr", "es", "de", "it", "ja", "ko", "zh"]
 async def _(jink):
     match = jink.pattern_match.group(1)
     itu = match.split(" ")
-    if itu[0] in BAHASA:
-        is_lang, lang = True, itu[0]
-    else:
-        is_lang, lang = False, BAHASA
-    if jink.is_reply:
-        kata = (await jink.get_reply_message()).message
-        if is_lang:
-            with suppress(BaseException):
-                kata = match.split(maxsplit=1)[1]
-    else:
-        kata = match
-        if is_lang:
-            with suppress(BaseException):
-                kata = match.split(maxsplit=1)[1]
+    is_lang, lang = (True, itu[0]) if itu[0] in BAHASA else (False, BAHASA)
+    kata = (await jink.get_reply_message()).message if jink.is_reply else match
+    if is_lang:
+        with suppress(BaseException):
+            kata = match.split(maxsplit=1)[1]
     if not kata:
         await jink.eor("`Reply to text message or provide a text!`", time=5)
         return
@@ -50,11 +41,7 @@ async def _(jink):
         text = strip_format(strip_emoji(kata))
         translator = Translator()
         translation = await translator(text, targetlang=lang)
-        tr = "**Detected:** `{}`\n**Translated:** `{}`\n\n```{}```".format(
-            await translator.detect(translation.orig),
-            await translator.detect(translation.text),
-            translation.text,
-        )
+        tr = f"**Detected:** `{await translator.detect(translation.orig)}`\n**Translated:** `{await translator.detect(translation.text)}`\n\n```{translation.text}```"
         await jink.eor(tr)
     except Exception as err:
         await jink.eor(f"Error {err}")

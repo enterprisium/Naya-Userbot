@@ -201,7 +201,6 @@ heroku_api, app_name = Var.HEROKU_API, Var.HEROKU_APP_NAME
 @callback("updatenow", owner=True)
 async def update(eve):
     repo = Repo()
-    ac_br = repo.active_branch
     if heroku_api:
         import heroku3
 
@@ -230,6 +229,7 @@ async def update(eve):
             remote.set_url(heroku_git_url)
         else:
             remote = repo.create_remote("heroku", heroku_git_url)
+        ac_br = repo.active_branch
         try:
             remote.push(refspec=f"HEAD:refs/heads/{ac_br}", force=True)
         except GitCommandError as error:
