@@ -85,7 +85,6 @@ async def DummyHandler(bjir):
             except Exception as er:
                 LOGS.exception(er)
 
-        # greetings
         elif get_welcome(bjir.chat_id):
             user = await bjir.get_user()
             chat = await bjir.get_chat()
@@ -100,11 +99,10 @@ async def DummyHandler(bjir):
             uu = user.username
             username = f"@{uu}" if uu else mention
             wel = get_welcome(bjir.chat_id)
-            msgg = wel["welcome"]
             med = wel["media"] or None
             userid = user.id
             msg = None
-            if msgg:
+            if msgg := wel["welcome"]:
                 msg = msgg.format(
                     mention=mention,
                     group=title,
@@ -140,11 +138,10 @@ async def DummyHandler(bjir):
         uu = user.username
         username = f"@{uu}" if uu else mention
         wel = get_goodbye(bjir.chat_id)
-        msgg = wel["goodbye"]
         med = wel["media"]
         userid = user.id
         msg = None
-        if msgg:
+        if msgg := wel["goodbye"]:
             msg = msgg.format(
                 mention=mention,
                 group=title,
